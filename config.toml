@@ -1,0 +1,10 @@
+[arxiv]
+categories = ["cs.LG", "cs.CL"]
+max_results = 100
+
+[llm]
+provider = "ollama" # or "llama_cpp"
+model = "llama3.1"
+base_url = "http://localhost:11434"
+temperature = 0.1
+prompt = "Prioritize papers with strong methodological novelty and practical relevance."

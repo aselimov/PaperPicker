@@ -1,0 +1,29 @@
+[project]
+name = "paper-picker"
+version = "0.1.0"
+description = "CLI tool to fetch recent arXiv papers, rank with local LLMs, and download selected PDFs"
+requires-python = ">=3.11"
+readme = "README.md"
+dependencies = []
+
+[project.scripts]
+paper-picker = "paper_picker.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
