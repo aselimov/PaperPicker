@@ -11,7 +11,6 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-
 ARXIV_API = "https://export.arxiv.org/api/query"
 
 
@@ -68,7 +67,9 @@ def _parse_arxiv_feed(xml_data: bytes) -> list[Paper]:
     for entry in root.findall("atom:entry", ns):
         abs_url = _entry_text(entry, "atom:id", ns)
         arxiv_id = abs_url.rstrip("/").split("/")[-1]
-        published = datetime.fromisoformat(_entry_text(entry, "atom:published", ns).replace("Z", "+00:00"))
+        published = datetime.fromisoformat(
+            _entry_text(entry, "atom:published", ns).replace("Z", "+00:00")
+        )
         title = _clean_whitespace(_entry_text(entry, "atom:title", ns))
         abstract = _clean_whitespace(_entry_text(entry, "atom:summary", ns))
         authors = [
@@ -135,9 +136,13 @@ def score_papers(
     prompt = build_scoring_prompt(papers, user_prompt=user_prompt, n=n)
 
     if provider == "ollama":
-        raw = _call_ollama(prompt=prompt, model=model, base_url=base_url, temperature=temperature)
+        raw = _call_ollama(
+            prompt=prompt, model=model, base_url=base_url, temperature=temperature
+        )
     elif provider == "llama_cpp":
-        raw = _call_llama_cpp(prompt=prompt, model=model, base_url=base_url, temperature=temperature)
+        raw = _call_llama_cpp(
+            prompt=prompt, model=model, base_url=base_url, temperature=temperature
+        )
     else:
         raise ValueError(f"Unsupported provider: {provider}")
 
@@ -255,7 +260,9 @@ def _format_authors_apa(authors: list[str]) -> str:
 
 def download_paper_pdf(paper: Paper, download_dir: Path) -> Path:
     download_dir.mkdir(parents=True, exist_ok=True)
-    safe_title = re.sub(r"[^A-Za-z0-9._-]+", "_", paper.title).strip("_")[:80] or paper.arxiv_id
+    safe_title = (
+        re.sub(r"[^A-Za-z0-9._-]+", "_", paper.title).strip("_")[:80] or paper.arxiv_id
+    )
     filename = f"{paper.arxiv_id}_{safe_title}.pdf"
     output = download_dir / filename
 

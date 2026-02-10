@@ -14,9 +14,23 @@ from .core import (
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Paper Picker: rank recent arXiv papers with local LLMs.")
-    parser.add_argument("--config", type=Path, default=Path("config.toml"), help="Path to config TOML file")
-    parser.add_argument("-n", "--num", dest="n", type=int, required=True, help="Number of top papers to return")
+    parser = argparse.ArgumentParser(
+        description="Paper Picker: rank recent arXiv papers with local LLMs."
+    )
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=Path("config.toml"),
+        help="Path to config TOML file",
+    )
+    parser.add_argument(
+        "-n",
+        "--num",
+        dest="n",
+        type=int,
+        required=True,
+        help="Number of top papers to return",
+    )
     return parser.parse_args()
 
 
@@ -47,7 +61,9 @@ def main() -> None:
         print("No papers found in the last week for these categories.")
         return
 
-    print(f"Found {len(week_papers)} papers from the last week. Scoring with {provider}/{model}...")
+    print(
+        f"Found {len(week_papers)} papers from the last week. Scoring with {provider}/{model}..."
+    )
     ranked = score_papers(
         week_papers,
         n=args.n,
@@ -69,7 +85,11 @@ def main() -> None:
         print(f"    Reason: {reason or '(no reason provided)'}")
         print()
 
-    selected = input("Select papers to download (e.g. 1,3 or 'all'; blank to skip): ").strip().lower()
+    selected = (
+        input("Select papers to download (e.g. 1,3 or 'all'; blank to skip): ")
+        .strip()
+        .lower()
+    )
     if not selected:
         print("No downloads selected.")
         return
