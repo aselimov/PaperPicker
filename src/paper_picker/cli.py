@@ -16,7 +16,7 @@ from .core import (
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Paper Picker: rank recent arXiv papers with local LLMs.")
     parser.add_argument("--config", type=Path, default=Path("config.toml"), help="Path to config TOML file")
-    parser.add_argument("--n", type=int, required=True, help="Number of top papers to return")
+    parser.add_argument("-n", "--num", dest="n", type=int, required=True, help="Number of top papers to return")
     return parser.parse_args()
 
 

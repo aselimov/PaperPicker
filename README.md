@@ -12,7 +12,7 @@ Paper Picker is a CLI-first Python tool that:
 
 ```bash
 uv sync --dev
-uv run paper-picker --n 5
+uv run paper-picker -n 5
 ```
 
 ## Run tests (pytest via uv)
@@ -36,6 +36,6 @@ Edit `config.toml`:
 
 ## Notes
 
-- `--n` controls how many top papers the model should return.
+- `-n` / `--num` controls how many top papers the model should return.
 - The model is instructed to return strict JSON and scores in `[0, 100]`.
 - APA citations are printed to stdout after download.
