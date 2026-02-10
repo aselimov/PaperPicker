@@ -6,10 +6,48 @@ on:
       - main
       - work
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  pytest:
+  black:
+    name: Black formatting
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install dependencies
+        run: uv sync --dev
+
+      - name: Reformat Python files with Black
+        run: uv run black .
+
+      - name: Commit Black formatting changes
+        if: github.event_name == 'push' || (github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Apply Black formatting"
+          file_pattern: "*.py"
+
+  pytest:
+    name: Pytest
+    runs-on: ubuntu-latest
+    needs: black
 
     steps:
       - name: Check out repository
