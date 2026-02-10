@@ -9,6 +9,9 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   black:
     name: Black formatting
@@ -17,6 +20,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -31,6 +36,13 @@ jobs:
 
       - name: Reformat Python files with Black
         run: uv run black .
+
+      - name: Commit Black formatting changes
+        if: github.event_name == 'push' || (github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Apply Black formatting"
+          file_pattern: "*.py"
 
   pytest:
     name: Pytest
