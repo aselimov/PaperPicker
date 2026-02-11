@@ -16,7 +16,11 @@ from .core import (
 
 def get_default_config_path() -> Path:
     xdg_config_home = os.environ.get("XDG_CONFIG_HOME")
-    base_dir = Path(xdg_config_home).expanduser() if xdg_config_home else Path.home() / ".config"
+    base_dir = (
+        Path(xdg_config_home).expanduser()
+        if xdg_config_home
+        else Path.home() / ".config"
+    )
     return base_dir / "paper_picker.toml"
 
 
