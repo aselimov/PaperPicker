@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 
 from .core import (
@@ -13,6 +14,15 @@ from .core import (
 )
 
 
+def get_default_config_path() -> Path:
+    xdg_config_home = os.environ.get("XDG_CONFIG_HOME")
+    base_dir = Path(xdg_config_home).expanduser() if xdg_config_home else Path.home() / ".config"
+    return base_dir / "paper_picker.toml"
+
+
+DEFAULT_CONFIG_PATH = get_default_config_path()
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Paper Picker: rank recent arXiv papers with local LLMs."
@@ -20,7 +30,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--config",
         type=Path,
-        default=Path("config.toml"),
+        default=get_default_config_path(),
         help="Path to config TOML file",
     )
     parser.add_argument(
