@@ -23,7 +23,7 @@ uv run pytest
 
 ## Configuration
 
-Edit `config.toml`:
+Edit `${XDG_CONFIG_HOME:-~/.config}/paper_picker.toml` (or pass `--config`):
 
 - `arxiv.categories`: list of arXiv categories (for example, `cs.LG`, `cs.CL`).
 - `arxiv.max_results`: API query size before filtering to last week.
